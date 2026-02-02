@@ -1,0 +1,48 @@
+/* تنسيقات RTL للغة العربية */
+[data-testid="stAppViewContainer"] {
+    direction: rtl;
+    text-align: right;
+}
+
+/* تحسين الخطوط للعربية */
+* {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* تحسين الأزرار */
+.stButton > button {
+    width: 100%;
+    margin: 5px 0;
+}
+
+/* تحسين الحقول */
+.stTextInput > div > div > input,
+.stTextArea > div > div > textarea,
+.stDateInput > div > div > input,
+.stSelectbox > div > div > select {
+    text-align: right;
+    direction: rtl;
+}
+
+/* تحسين الجداول */
+table {
+    direction: rtl;
+    text-align: right;
+}
+
+/* تحسين الأعمدة */
+[data-testid="column"] {
+    text-align: right;
+}
+
+/* تحسين العناوين */
+h1, h2, h3, h4, h5, h6 {
+    text-align: right;
+    font-weight: bold;
+}
+
+/* تحسين القوائم */
+ul, ol {
+    text-align: right;
+    padding-right: 20px;
+}
