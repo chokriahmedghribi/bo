@@ -3,6 +3,36 @@ import sqlite3
 import os
 from datetime import datetime
 from streamlit_option_menu import option_menu
+import subprocess
+import sys
+
+# تهيئة المجلدات عند التشغيل
+def setup_directories():
+    import os
+    directories = [
+        "uploads/entrant",
+        "uploads/sortant", 
+        "uploads/jointe",
+        "database",
+        "assets"
+    ]
+    for directory in directories:
+        os.makedirs(directory, exist_ok=True)
+    
+    # إنشاء ملف CSS إذا لم يكن موجودًا
+    if not os.path.exists("assets/rtl.css"):
+        with open("assets/rtl.css", "w", encoding="utf-8") as f:
+            f.write("""
+            [data-testid="stAppViewContainer"] {
+                direction: rtl;
+                text-align: right;
+            }
+            * {
+                font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            }
+            """)
+
+setup_directories()
 
 # إعدادات الصفحة
 st.set_page_config(
