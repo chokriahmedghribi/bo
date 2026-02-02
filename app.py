@@ -9,96 +9,59 @@ import sys
 
 
 
-# محاولة استيراد streamlit_option_menu مع معالجة الخطأ
-try:
-    from streamlit_option_menu import option_menu
-    OPTION_MENU_AVAILABLE = True
-except ImportError:
-    OPTION_MENU_AVAILABLE = False
-    st.error("⚠️ مكتبة streamlit-option-menu غير مثبتة. يرجى تثبيتها: pip install streamlit-option-menu")
+import streamlit as st
+import sys
+import os
+import subprocess
 
-# إعدادات الصفحة
-st.set_page_config(
-    page_title="نظام مكتب الظبط",
-    page_icon="📋",
-    layout="wide",
-    initial_sidebar_state="expanded"
-)
-
-# وظيفة بديلة لـ option_menu
-def simple_menu(options, icons=None, default_index=0):
-    with st.sidebar:
-        st.markdown("### القائمة الرئيسية")
-        selected = st.radio(
-            "اختر الصفحة:",
-            options,
-            index=default_index,
-            label_visibility="collapsed"
-        )
-    return selected
-
-# تحميل تنسيق RTL
-def load_css():
-    css_file = "assets/rtl.css"
-    if os.path.exists(css_file):
-        with open(css_file, "r", encoding="utf-8") as f:
-            st.markdown(f"<style>{f.read()}</style>", unsafe_allow_html=True)
-    else:
-        # CSS افتراضي إذا لم يوجد الملف
-        st.markdown("""
-        <style>
-        [data-testid="stAppViewContainer"] {
-            direction: rtl;
-            text-align: right;
-        }
-        </style>
-        """, unsafe_allow_html=True)
-
-load_css()
-
-# إنشاء مجلدات إذا لم تكن موجودة
-folders = ["uploads", "uploads/entrant", "uploads/sortant", 
-           "uploads/jointe", "database", "assets", "templates"]
-for folder in folders:
-    os.makedirs(folder, exist_ok=True)
-
-# تهيئة قاعدة البيانات
-try:
-    from database.models import init_db
-    init_db()
-except Exception as e:
-    st.warning(f"⚠️ تحذير في تهيئة قاعدة البيانات: {e}")
-
-# القائمة الجانبية
-with st.sidebar:
-    st.image("https://cdn-icons-png.flaticon.com/512/3067/3067256.png", width=100)
-    st.title("نظام مكتب الظبط")
-    st.markdown("---")
+# فحص وتركيب المكتبات المفقودة
+def check_and_install_dependencies():
+    missing_packages = []
     
-    if OPTION_MENU_AVAILABLE:
-        selected = option_menu(
-            menu_title="القائمة الرئيسية",
-            options=["الرئيسية", "البريد الوارد", "البريد الصادر", 
-                    "البريد المشترك", "التذكير", "الجهات", "الإعدادات"],
-            icons=["house", "inbox", "outbox", "envelope", "bell", "people", "gear"],
-            menu_icon="menu-app",
-            default_index=0,
-            orientation="vertical",
-            styles={
-                "container": {"padding": "0!important", "background-color": "#fafafa"},
-                "icon": {"color": "orange", "font-size": "20px"},
-                "nav-link": {"font-size": "16px", "text-align": "right", 
-                           "margin":"0px", "--hover-color": "#eee"},
-                "nav-link-selected": {"background-color": "#2c3e50"},
-            }
-        )
-    else:
-        selected = simple_menu(
-            ["الرئيسية", "البريد الوارد", "البريد الصادر", 
-             "البريد المشترك", "التذكير", "الجهات", "الإعدادات"]
-        )
+    # قائمة المكتبات المطلوبة
+    required_packages = [
+        'streamlit_option_menu',
+        'sqlalchemy',
+        'docx',
+        'pandas'
+    ]
+    
+    for package in required_packages:
+        try:
+            __import__(package.replace('-', '_'))
+        except ImportError:
+            missing_packages.append(package)
+    
+    if missing_packages:
+        st.warning(f"المكتبات التالية غير مثبتة: {missing_packages}")
+        st.info("جارٍ تثبيت المكتبات المطلوبة...")
+        
+        # محاولة التثبيت باستخدام pip
+        try:
+            for package in missing_packages:
+                if package == 'docx':
+                    package_name = 'python-docx'
+                elif package == 'streamlit_option_menu':
+                    package_name = 'streamlit-option-menu'
+                else:
+                    package_name = package
+                
+                subprocess.check_call([sys.executable, "-m", "pip", "install", package_name])
+            st.success("تم تثبيت المكتبات بنجاح! يرجى إعادة تحميل الصفحة.")
+            st.stop()
+        except Exception as e:
+            st.error(f"فشل تثبيت المكتبات: {e}")
 
-# بقية الكود يبقى كما هو...
+# استدعاء دالة فحص المكتبات
+check_and_install_dependencies()
+
+# الآن يمكن استيراد المكتبات
+from streamlit_option_menu import option_menu
+import sqlalchemy
+from datetime import datetime
+# ... باقي الاستيرادات
+
+# بقية الكود...
 # إعدادات الصفحة
 st.set_page_config(
     page_title="نظام مكتب الظبط",

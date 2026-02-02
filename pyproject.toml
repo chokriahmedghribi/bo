@@ -1,0 +1,18 @@
+[build-system]
+requires = ["setuptools", "wheel"]
+
+[project]
+name = "bureau-ordre"
+version = "1.0.0"
+dependencies = [
+    "streamlit>=1.53.1",
+    "streamlit-option-menu>=0.3.10",
+    "sqlalchemy>=2.0.23",
+    "python-docx>=0.8.11",
+    "pandas>=2.3.3",
+    "openpyxl>=3.1.2",
+    "python-dateutil>=2.9.0",
+]
+
+[project.optional-dependencies]
+dev = ["pytest", "black"]
