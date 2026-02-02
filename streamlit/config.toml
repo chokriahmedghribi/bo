@@ -1,0 +1,15 @@
+[browser]
+serverAddress = "0.0.0.0"
+serverPort = 8501
+
+[theme]
+primaryColor = "#2c3e50"
+backgroundColor = "#f8f9fa"
+secondaryBackgroundColor = "#ffffff"
+textColor = "#000000"
+font = "sans serif"
+
+[server]
+enableCORS = false
+enableXsrfProtection = false
+maxUploadSize = 100
